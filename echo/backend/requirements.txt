@@ -1,0 +1,6 @@
+anthropic>=0.40.0
+elevenlabs>=1.0.0
+twilio>=9.0.0
+flask>=3.0.0
+websockets>=12.0
+python-dotenv>=1.0.0

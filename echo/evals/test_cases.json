@@ -1,0 +1,285 @@
+[
+  {
+    "id": "tc_01",
+    "category": "emotional_checkin",
+    "message": "Are you doing okay? I've been so worried about you.",
+    "sender": "Mom",
+    "conversation_history": [
+      {"body": "Good morning! Hope today is a good day for you.", "sender": "Mom", "outbound": false},
+      {"body": "Thanks for thinking of me.", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system", "ALS", "headset", "I cannot"],
+      "reply_sentiment": "reassurance"
+    }
+  },
+  {
+    "id": "tc_02",
+    "category": "simple_ack",
+    "message": "Ok sounds good!",
+    "sender": "Alex",
+    "conversation_history": [
+      {"body": "Can we meet Thursday at 3?", "outbound": true},
+      {"body": "Ok sounds good!", "sender": "Alex", "outbound": false}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 1,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "acknowledgment"
+    }
+  },
+  {
+    "id": "tc_03",
+    "category": "logistical",
+    "message": "What time works for you on Saturday? Morning or afternoon?",
+    "sender": "David",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "scheduling"
+    }
+  },
+  {
+    "id": "tc_04",
+    "category": "ambiguous",
+    "message": "I need to talk to you about something important.",
+    "sender": "Sarah",
+    "conversation_history": [
+      {"body": "Hey how are you doing?", "sender": "Sarah", "outbound": false},
+      {"body": "Doing well, thanks.", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": true,
+      "max_depth": 3,
+      "reply_should_not_contain": ["BCI", "system", "I can't"],
+      "reply_sentiment": "open"
+    }
+  },
+  {
+    "id": "tc_05",
+    "category": "medical",
+    "message": "The doctor called about your appointment next Tuesday at 2pm. Can you make it?",
+    "sender": "Nurse Patel",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "confirmation"
+    }
+  },
+  {
+    "id": "tc_06",
+    "category": "emotional_checkin",
+    "message": "Missing you so much today. Just wanted you to know I love you.",
+    "sender": "Wife",
+    "conversation_history": [
+      {"body": "Thinking of you.", "outbound": true},
+      {"body": "Love you too.", "sender": "Wife", "outbound": false}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "warmth"
+    }
+  },
+  {
+    "id": "tc_07",
+    "category": "simple_ack",
+    "message": "Yes",
+    "sender": "Brother",
+    "conversation_history": [
+      {"body": "Can you bring my book next time?", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 1,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "acknowledgment"
+    }
+  },
+  {
+    "id": "tc_08",
+    "category": "logistical",
+    "message": "Your medication delivery is scheduled for Wednesday between 10am and noon. Will someone be home?",
+    "sender": "Pharmacy",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "confirmation"
+    }
+  },
+  {
+    "id": "tc_09",
+    "category": "ambiguous",
+    "message": "Can we talk? I've been thinking a lot about everything.",
+    "sender": "Friend Mike",
+    "conversation_history": [
+      {"body": "Hey checking in on you", "sender": "Friend Mike", "outbound": false},
+      {"body": "Thanks Mike, doing okay.", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": true,
+      "max_depth": 3,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "open"
+    }
+  },
+  {
+    "id": "tc_10",
+    "category": "medical",
+    "message": "Physical therapy session cancelled for today. Do you want to reschedule for Thursday?",
+    "sender": "PT Clinic",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "scheduling"
+    }
+  },
+  {
+    "id": "tc_11",
+    "category": "emotional_checkin",
+    "message": "The kids made a card for you today at school. They miss Grandpa.",
+    "sender": "Daughter",
+    "conversation_history": [
+      {"body": "Give them a big hug from me.", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "warmth"
+    }
+  },
+  {
+    "id": "tc_12",
+    "category": "simple_ack",
+    "message": "On my way! Be there in 20 minutes.",
+    "sender": "Caregiver",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 1,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "acknowledgment"
+    }
+  },
+  {
+    "id": "tc_13",
+    "category": "logistical",
+    "message": "The insurance company needs your signature on the form by Friday. Should I bring it over?",
+    "sender": "Social Worker",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "confirmation"
+    }
+  },
+  {
+    "id": "tc_14",
+    "category": "ambiguous",
+    "message": "I've been reading about new treatments. Have you heard about it?",
+    "sender": "Brother",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": true,
+      "max_depth": 3,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "open"
+    }
+  },
+  {
+    "id": "tc_15",
+    "category": "emotional_checkin",
+    "message": "How was your night? Did you sleep okay?",
+    "sender": "Wife",
+    "conversation_history": [
+      {"body": "Good night, love you.", "sender": "Wife", "outbound": false}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "warmth"
+    }
+  },
+  {
+    "id": "tc_16",
+    "category": "simple_ack",
+    "message": "Got it, thanks!",
+    "sender": "Neighbor",
+    "conversation_history": [
+      {"body": "The package is on your porch.", "outbound": true}
+    ],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 1,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "acknowledgment"
+    }
+  },
+  {
+    "id": "tc_17",
+    "category": "logistical",
+    "message": "Just confirming the home visit from occupational therapy is tomorrow at 11am. See you then!",
+    "sender": "OT Clinic",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "confirmation"
+    }
+  },
+  {
+    "id": "tc_18",
+    "category": "medical",
+    "message": "Your specialist wants to discuss adjusting the ventilator settings. Can you do a call this week?",
+    "sender": "Dr. Chen's office",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "scheduling"
+    }
+  },
+  {
+    "id": "tc_19",
+    "category": "emotional_checkin",
+    "message": "Just thinking about the fishing trip we took years ago. Good times.",
+    "sender": "Old Friend Tom",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": false,
+      "max_depth": 2,
+      "reply_should_not_contain": ["BCI", "system"],
+      "reply_sentiment": "warmth"
+    }
+  },
+  {
+    "id": "tc_20",
+    "category": "ambiguous",
+    "message": "I wanted to ask you something personal if that's okay.",
+    "sender": "Cousin",
+    "conversation_history": [],
+    "expected": {
+      "uses_intent_confirm": true,
+      "max_depth": 3,
+      "reply_should_not_contain": ["BCI", "system", "I cannot", "unable"],
+      "reply_sentiment": "open"
+    }
+  }
+]

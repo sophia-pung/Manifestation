@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BCI Navigator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #app-title {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    #menu-name {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: #2a2a2a;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    #tiles {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 360px;
+    }
+
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80px;
+      border-radius: 12px;
+      border: 1px solid #1e1e1e;
+      background: #111;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #444;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .tile:hover {
+      border-color: #333;
+      color: #666;
+    }
+
+    .tile.active {
+      border-color: #3b82f6;
+      background: #0d1b35;
+      color: #93c5fd;
+      box-shadow: 0 0 0 1px #3b82f6, 0 0 24px rgba(59,130,246,0.2);
+      animation: breathe 2s ease-in-out infinite;
+    }
+
+    .tile.back {
+      font-size: 15px;
+      height: 56px;
+      color: #2d2d2d;
+      border-color: #181818;
+    }
+
+    .tile.back.active {
+      color: #60a5fa;
+    }
+
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 0 1px #3b82f6, 0 0 16px rgba(59,130,246,0.15); }
+      50%       { box-shadow: 0 0 0 1px #60a5fa, 0 0 32px rgba(59,130,246,0.35); }
+    }
+
+    #flash {
+      margin-top: 40px;
+      height: 24px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: #22c55e;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    #flash.visible { opacity: 1; }
+
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid #222;
+      background: #111;
+      color: #333;
+      font-size: 12px;
+      font-family: inherit;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+
+    .btn:hover { border-color: #444; color: #666; }
+    .btn.blink:hover { border-color: #3b82f6; color: #60a5fa; }
+    .btn.clench:hover { border-color: #22c55e; color: #4ade80; }
+  </style>
+</head>
+<body>
+
+<div id="app-title">BCI Navigator</div>
+<div id="menu-name">Home</div>
+
+<div id="tiles"></div>
+
+<div id="flash"></div>
+
+<div id="controls">
+  <button class="btn blink" onclick="signal('blink')">B — Blink</button>
+  <button class="btn clench" onclick="signal('clench')">J — Clench</button>
+</div>
+
+<script>
+  let prevState = null
+
+  function render(state) {
+    const tilesEl = document.getElementById('tiles')
+    const menuNameEl = document.getElementById('menu-name')
+    const flashEl = document.getElementById('flash')
+
+    // Menu label
+    menuNameEl.textContent = state.menu.charAt(0).toUpperCase() + state.menu.slice(1)
+
+    // Tiles — only rebuild DOM if items changed
+    const itemsKey = state.items.join('|') + ':' + state.index
+    const prevKey = prevState ? prevState.items.join('|') + ':' + prevState.index : null
+
+    if (itemsKey !== prevKey) {
+      tilesEl.innerHTML = ''
+      state.items.forEach((label, i) => {
+        const div = document.createElement('div')
+        div.className = 'tile' + (i === state.index ? ' active' : '') + (label.startsWith('←') ? ' back' : '')
+        div.textContent = label
+        div.onclick = () => signal('clench')  // clicking a tile = clench
+        tilesEl.appendChild(div)
+      })
+    } else {
+      // Just update active class
+      const tiles = tilesEl.querySelectorAll('.tile')
+      tiles.forEach((t, i) => {
+        t.classList.toggle('active', i === state.index)
+      })
+    }
+
+    // Flash message
+    if (state.flash) {
+      flashEl.textContent = state.flash
+      flashEl.classList.add('visible')
+    } else {
+      flashEl.classList.remove('visible')
+    }
+
+    prevState = state
+  }
+
+  async function signal(name) {
+    try {
+      await fetch('/signal/' + name, { method: 'POST' })
+    } catch (e) {}
+  }
+
+  async function poll() {
+    try {
+      const r = await fetch('/state')
+      if (r.ok) render(await r.json())
+    } catch (e) {}
+    setTimeout(poll, 80)
+  }
+
+  // Keyboard shortcuts for demo
+  document.addEventListener('keydown', e => {
+    if (e.key === 'b' || e.key === 'B') signal('blink')
+    if (e.key === 'j' || e.key === 'J') signal('clench')
+  })
+
+  poll()
+</script>
+</body>
+</html>
